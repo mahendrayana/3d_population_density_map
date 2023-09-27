@@ -1,4 +1,4 @@
-# Airbnb Data Analytics With Bigquery, Google Spreadsheet, and Tableau
+# 3D Population Density Visualization
 
 
 ![3d map of Bali](Images/titled_final_bali.png)
@@ -10,7 +10,6 @@
 - [Project Overview](#project-overview)
 - [Data](#data)
 - [Data Preprocessing](#data-preprocessing)
-- [Database Design](#database-design)
 - [Visualization](#visualization)
 - [Acknowledgement](#acknowledgement)
 - [Contact](#contact)
@@ -29,10 +28,14 @@ The main data used is the subset for Indonesia, but still, it's necesarry to lay
 1. loading the dataset and the shp
 2. match the crs
 3. Intersect the data and the shp
-4. Create the matrix as the value that determine the visualization's height
+4. Create the matrix as the value that determine the visualization's height.
 
 ## Visualization
 The output mapping is visualized using rayshader package and annotated using magick package.
+
+## Acknowledgment
+This project draws significant inspiration from Mr.Pecners project that could be accessed here:
+https://github.com/Pecners/kontur_rayshader_tutorial
 
 
 ## Contact

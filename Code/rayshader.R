@@ -2,30 +2,26 @@ library(sf)
 library(tidyverse)
 library(stars)
 library(rayshader)
-library(MetBrewer)
 library(colorspace)
 
 #load shp
 districts<-st_read("shpkab")
-
-df <- st_drop_geometry(districts)
-
 # Filter the ROI shapefile and necesarry features
 ids_to_keep <- c("ID714")
-
 districts_subset <- subset(districts, ADM2_PCODE %in% ids_to_keep)
-
 shp_subset <- districts_subset %>% select(ADM1_EN, ADM1_PCODE, geometry)
 
+#Load the data
 data <- st_read("kontur_population_ID_20220630.gpkg")
 
+#Match the crs and intersect
 shp_final <- shp_subset |> 
   st_transform(crs = st_crs(data))
 
 pop <- st_intersection(data, shp_final)
 
-# define aspect ratio based on bounding box
 
+# define aspect ratio based on bounding box
 bb <- st_bbox(pop)
 
 bottom_left <- st_point(c(bb[["xmin"]], bb[["ymin"]])) |> 
@@ -53,7 +49,7 @@ if (width > height) {
 
 # convert to raster so we can then convert to matrix
 
-size <- 2000
+size <- 2000 #this is the final size. Lower the matrix size for the trial render until you find everything perfet 
 
 pop_rast <- st_rasterize(pop, 
                              nx = floor(size * w_ratio),
@@ -65,12 +61,10 @@ mat <- matrix(pop_rast$population,
 
 # create color palette
 
-c1 <- met.brewer("VanGogh3")
 retro <- c("#E8E8E8", "#E8BD3B", "#E87927", "#DB4C46", "#AF3736", "#4F315B", "#3D1C49")
-texture <- grDevices::colorRampPalette(retro )(100)
 swatchplot(retro)
 
-
+#Interactive window
 mat |> 
   height_shade(texture = retro) |> 
   plot_3d(heightmap = mat,
@@ -80,7 +74,7 @@ mat |>
 
 render_camera(theta = 70, phi = 45, zoom = 0.95)
 
-
+#trial render
 
 render_highquality(
   filename = "test_jakarta.png",
@@ -91,6 +85,7 @@ render_highquality(
   lightintensity = c(800, 200)
 )
 
+#Final render
 
 outfile <- "final_jogja.png"
 
